@@ -14,11 +14,11 @@ type D3Cell = {
   coord: Point;
 };
 
-const CELL_SIZE = 50;
-const START_OFFSET = 10;
+const CELL_SIZE = 32;
+const START_OFFSET = 1;
 
-const NUM_CELLS_X = Math.floor(window.innerHeight / CELL_SIZE);
-const NUM_CELLS_Y = Math.floor(window.innerWidth / CELL_SIZE);
+const NUM_CELLS_X = Math.floor(window.innerHeight / CELL_SIZE) - 8;
+const NUM_CELLS_Y = Math.floor(window.innerWidth / CELL_SIZE) - 2;
 
 declare const d3: any;
 
@@ -29,12 +29,15 @@ class GameOfLife {
     this._displayData = this.getBoardDisplayData();
   }
 
-  public render(rootElementSelector: string | HTMLElement) {
+  public render(rootElementSelector: string | Element | null) {
+    const width = NUM_CELLS_Y * CELL_SIZE + START_OFFSET * 2;
+    const height = NUM_CELLS_X * CELL_SIZE + START_OFFSET * 2;
+
     const grid = d3
       .select(rootElementSelector)
       .append("svg")
-      .attr("width", `100vw`)
-      .attr("height", `100vh`);
+      .attr("width", `${width}px`)
+      .attr("height", `${height}px`);
 
     const row = grid
       .selectAll(".row")
@@ -71,7 +74,6 @@ class GameOfLife {
       .style("fill", "transparent")
       .style("stroke", "#000")
       .on("click", (d: D3Cell) => {
-        console.log("click");
         d.alive = !d.alive;
         this.setCellColor(d.coord, d.alive ? "gold" : "transparent");
       });
@@ -116,4 +118,4 @@ class GameOfLife {
 }
 
 const game = new GameOfLife();
-game.render(document.body);
+game.render(document.querySelector("#app"));
