@@ -218,20 +218,26 @@ class GameOfLife {
 
 let button: HTMLButtonElement;
 let generations = 0;
+let wentExtinct = false;
 const game = new GameOfLife();
 game.render("#game");
-game.onNextTick = (wentExtinct: boolean) => {
+game.onNextTick = (allDied: boolean) => {
   document.querySelector("#status")!.innerHTML = `Generation: ${generations++}`;
-  if (wentExtinct) {
+  if (allDied) {
+    wentExtinct = true;
     game.isRunning = false;
-    button.innerHTML = "Start";
+    button.style.backgroundColor = !game.isRunning ? "#1a1a1a" : "maroon";
   }
 };
 
 button = document.querySelector("#toggle-game") as HTMLButtonElement;
 button.addEventListener("click", () => {
+  // if was paused because it went extinct
+  if(!game.isRunning && wentExtinct) {
+    generations = 0;
+  }
   game.isRunning = !game.isRunning;
-  button.innerHTML = !game.isRunning ? "Start" : "Pause";
+  button.style.backgroundColor = !game.isRunning ? "#1a1a1a" : "maroon";
 });
 
 const slider = document.querySelector("#speed") as any;
