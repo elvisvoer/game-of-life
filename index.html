@@ -11,7 +11,10 @@
 
 <body>
   <h1>Game Of Life</h1>
-  <button id="toggle-game">Start</button>
+  <div class="controls">
+    <button id="toggle-game">Start</button>
+    <input type="range" min="20" max="780" value="380" id="speed">
+  </div>
   <div id="app"></div>
   <script type="module" src="/src/main.ts"></script>
 </body>

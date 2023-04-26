@@ -26,11 +26,23 @@ class GameOfLife {
   private _displayData: D3Cell[][] = [];
 
   public isRunning: boolean = false;
+  public speed: number = 500;
 
   constructor() {
     this._displayData = this.getBoardDisplayData();
 
-    setInterval(this.tick.bind(this), 500);
+    let lastTime = new Date().getTime();
+    const timer = () => {
+      requestAnimationFrame(timer);
+      var currentTime = new Date().getTime();
+
+      if (currentTime - lastTime >= this.speed) {
+        this.tick();
+        lastTime = currentTime;
+      }
+    };
+    // autostart
+    timer();
   }
 
   public render(rootElementSelector: string | Element | null) {
@@ -78,6 +90,10 @@ class GameOfLife {
       .style("fill", "transparent")
       .style("stroke", "#000")
       .on("mouseenter", ({ coord }: D3Cell) => {
+        if (this.isRunning) {
+          return;
+        }
+
         const alive = this._displayData[coord.x][coord.y].alive;
         this.setIsAlive(coord, !alive);
       });
@@ -199,4 +215,9 @@ const button: HTMLButtonElement = document.querySelector(
 button.addEventListener("click", () => {
   game.isRunning = !game.isRunning;
   button.innerHTML = !game.isRunning ? "Start" : "Pause";
+});
+
+const slider = document.querySelector("#speed") as any;
+slider?.addEventListener("input", () => {
+  game.speed = slider?.value;
 });
