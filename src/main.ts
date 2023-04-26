@@ -25,6 +25,8 @@ declare const d3: any;
 class GameOfLife {
   private _displayData: D3Cell[][] = [];
 
+  public isRunning: boolean = false;
+
   constructor() {
     this._displayData = this.getBoardDisplayData();
   }
@@ -84,7 +86,7 @@ class GameOfLife {
     d3.select(`#c-${coord.x}-${coord.y}`).style("fill", color);
   }
 
-  public countNeighbors(data: D3Cell[][], { x, y }: Point) {
+  private countNeighbors(data: D3Cell[][], { x, y }: Point) {
     let total = 0;
 
     const check = (p: Point) => {
@@ -152,3 +154,11 @@ class GameOfLife {
 
 const game = new GameOfLife();
 game.render(document.querySelector("#app"));
+
+const button: HTMLButtonElement = document.querySelector(
+  "#toggle-game"
+) as HTMLButtonElement;
+button.addEventListener("click", () => {
+  game.isRunning = !game.isRunning;
+  button.innerHTML = !game.isRunning ? "Start" : "Pause";
+});
