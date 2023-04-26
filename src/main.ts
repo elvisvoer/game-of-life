@@ -24,9 +24,10 @@ declare const d3: any;
 
 class GameOfLife {
   private _displayData: D3Cell[][] = [];
+  private _delta: number = 50;
 
   public isRunning: boolean = false;
-  public speed: number = 500;
+  public onNextTick?: Function;
 
   constructor() {
     this._displayData = this.getBoardDisplayData();
@@ -36,13 +37,17 @@ class GameOfLife {
       requestAnimationFrame(timer);
       var currentTime = new Date().getTime();
 
-      if (currentTime - lastTime >= this.speed) {
+      if (currentTime - lastTime >= this._delta * 10) {
         this.tick();
         lastTime = currentTime;
       }
     };
     // autostart
     timer();
+  }
+
+  set speed(s: number) {
+    this._delta = 100 - s;
   }
 
   public render(rootElementSelector: string | Element | null) {
@@ -104,6 +109,8 @@ class GameOfLife {
       return;
     }
 
+    let allDied = true;
+
     const count = this.getAllNeighborsCount(this._displayData);
     count.forEach((line, row) =>
       line.forEach((neighborsCount, col) => {
@@ -112,12 +119,15 @@ class GameOfLife {
           (cell.alive && [2, 3].includes(neighborsCount)) ||
           (!cell.alive && [3].includes(neighborsCount))
         ) {
+          allDied = false;
           this.setIsAlive(cell.coord, true);
         } else {
           this.setIsAlive(cell.coord, false);
         }
       })
     );
+
+    this.onNextTick?.(allDied);
   }
 
   private setIsAlive(coord: Point, isAlive: boolean) {
@@ -206,12 +216,19 @@ class GameOfLife {
   }
 }
 
+let button: HTMLButtonElement;
+let generations = 0;
 const game = new GameOfLife();
-game.render(document.querySelector("#app"));
+game.render("#game");
+game.onNextTick = (wentExtinct: boolean) => {
+  document.querySelector("#status")!.innerHTML = `Generation: ${generations++}`;
+  if (wentExtinct) {
+    game.isRunning = false;
+    button.innerHTML = "Start";
+  }
+};
 
-const button: HTMLButtonElement = document.querySelector(
-  "#toggle-game"
-) as HTMLButtonElement;
+button = document.querySelector("#toggle-game") as HTMLButtonElement;
 button.addEventListener("click", () => {
   game.isRunning = !game.isRunning;
   button.innerHTML = !game.isRunning ? "Start" : "Pause";
