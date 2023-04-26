@@ -45,7 +45,7 @@ button {
   line-height: 1em;
 }
 button:hover {
-  filter: opacity(0.8);
+  filter: opacity(0.75);
 }
 button:focus,
 button:focus-visible {
@@ -55,7 +55,7 @@ button:focus-visible {
 .controls {
   display: flex;
   justify-content: space-around;
-  gap: 4rem;
+  gap: 2.5rem;
 }
 
 .controls input {
