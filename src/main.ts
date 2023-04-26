@@ -76,11 +76,44 @@ class GameOfLife {
       .on("click", (d: D3Cell) => {
         d.alive = !d.alive;
         this.setCellColor(d.coord, d.alive ? "gold" : "transparent");
+        console.log(this.countNeighbors(this._displayData, d.coord));
       });
   }
 
   public setCellColor(coord: Point, color: string) {
     d3.select(`#c-${coord.x}-${coord.y}`).style("fill", color);
+  }
+
+  public countNeighbors(data: D3Cell[][], { x, y }: Point) {
+    let total = 0;
+
+    const check = (p: Point) => {
+      if (!this.isOutOfBounds(p) && data[p.x][p.y].alive) {
+        total++;
+      }
+    };
+
+    [
+      { x: x - 1, y: y + 0 },
+      { x: x - 1, y: y + 1 },
+      { x: x + 0, y: y + 1 },
+      { x: x + 1, y: y + 1 },
+      { x: x + 1, y: y + 0 },
+      { x: x + 1, y: y - 1 },
+      { x: x + 0, y: y - 1 },
+      { x: x - 1, y: y - 1 },
+    ].forEach((dir) => check(dir));
+
+    return total;
+  }
+
+  private isOutOfBounds(coord: Point) {
+    return (
+      coord.x < 0 ||
+      coord.x > NUM_CELLS_X - 1 ||
+      coord.y < 0 ||
+      coord.y > NUM_CELLS_Y - 1
+    );
   }
 
   private getBoardDisplayData() {
