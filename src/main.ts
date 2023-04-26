@@ -29,6 +29,8 @@ class GameOfLife {
 
   constructor() {
     this._displayData = this.getBoardDisplayData();
+
+    setInterval(this.tick.bind(this), 500);
   }
 
   public render(rootElementSelector: string | Element | null) {
@@ -75,18 +77,54 @@ class GameOfLife {
       })
       .style("fill", "transparent")
       .style("stroke", "#000")
-      .on("click", (d: D3Cell) => {
-        d.alive = !d.alive;
-        this.setCellColor(d.coord, d.alive ? "gold" : "transparent");
-        console.log(this.countNeighbors(this._displayData, d.coord));
+      .on("mouseenter", ({ coord }: D3Cell) => {
+        const alive = this._displayData[coord.x][coord.y].alive;
+        this.setIsAlive(coord, !alive);
       });
   }
 
-  public setCellColor(coord: Point, color: string) {
-    d3.select(`#c-${coord.x}-${coord.y}`).style("fill", color);
+  public tick() {
+    if (!this.isRunning) {
+      return;
+    }
+
+    const count = this.getAllNeighborsCount(this._displayData);
+    count.forEach((line, row) =>
+      line.forEach((neighborsCount, col) => {
+        const cell = this._displayData[row][col];
+        if (
+          (cell.alive && [2, 3].includes(neighborsCount)) ||
+          (!cell.alive && [3].includes(neighborsCount))
+        ) {
+          this.setIsAlive(cell.coord, true);
+        } else {
+          this.setIsAlive(cell.coord, false);
+        }
+      })
+    );
   }
 
-  private countNeighbors(data: D3Cell[][], { x, y }: Point) {
+  private setIsAlive(coord: Point, isAlive: boolean) {
+    this._displayData[coord.x][coord.y].alive = isAlive;
+
+    const cell = d3.select(`#c-${coord.x}-${coord.y}`);
+    cell.style("fill", isAlive ? "gold" : "transparent");
+  }
+
+  private getAllNeighborsCount(data: D3Cell[][]): number[][] {
+    const result: number[][] = [];
+    for (let row = 0; row < data.length; row++) {
+      result.push([]);
+      for (let col = 0; col < data[row].length; col++) {
+        const count = this.countNeighbors(data, data[row][col].coord);
+        result[row].push(count);
+      }
+    }
+
+    return result;
+  }
+
+  private countNeighbors(data: D3Cell[][], { x, y }: Point): number {
     let total = 0;
 
     const check = (p: Point) => {
