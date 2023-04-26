@@ -24,7 +24,7 @@ declare const d3: any;
 
 class GameOfLife {
   private _displayData: D3Cell[][] = [];
-  private _delta: number = 50;
+  private _delta: number = 500;
 
   public isRunning: boolean = false;
   public onNextTick?: Function;
