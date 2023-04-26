@@ -37,7 +37,7 @@ class GameOfLife {
       requestAnimationFrame(timer);
       var currentTime = new Date().getTime();
 
-      if (currentTime - lastTime >= this._delta * 10) {
+      if (currentTime - lastTime >= this._delta) {
         this.tick();
         lastTime = currentTime;
       }
@@ -47,7 +47,12 @@ class GameOfLife {
   }
 
   set speed(s: number) {
-    this._delta = 100 - s;
+    // - s=[0...100] so we multiply by 10 to get a timer range of
+    // [10...1000]ms
+    // - we do a square root of the value so the slider is not
+    // a linear function, Math.ceil and the other times 10 is
+    // for rounding up the number and get to the [0..100] range
+    this._delta = (100 - Math.ceil(Math.sqrt(s) * 10)) * 10;
   }
 
   public render(rootElementSelector: string | Element | null) {
@@ -233,7 +238,7 @@ game.onNextTick = (allDied: boolean) => {
 button = document.querySelector("#toggle-game") as HTMLButtonElement;
 button.addEventListener("click", () => {
   // if was paused because it went extinct
-  if(!game.isRunning && wentExtinct) {
+  if (!game.isRunning && wentExtinct) {
     generations = 0;
   }
   game.isRunning = !game.isRunning;
