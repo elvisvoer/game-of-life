@@ -260,7 +260,7 @@ function setIsRunning(isRunning: boolean) {
 }
 
 game.onNextTick = (allDied: boolean) => {
-  document.querySelector("#status")!.innerHTML = `Generation: ${generations++}`;
+  document.querySelector("#status")!.innerHTML = `Generations: ${generations++}`;
   if (allDied) {
     wentExtinct = true;
     setIsRunning(false);
