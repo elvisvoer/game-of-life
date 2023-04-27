@@ -49,7 +49,7 @@ button:hover {
 }
 
 button.isRunning {
-  background-color: maroon;
+  background-color: darkred;
 }
 
 .controls {
@@ -60,6 +60,12 @@ button.isRunning {
 
 .controls input {
   width: 100%;
+  accent-color: darkred;
+}
+
+#status {
+  font-weight: normal;
+  color: darkorange;
 }
 
 @media (prefers-color-scheme: light) {
