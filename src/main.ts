@@ -85,6 +85,7 @@ class GameOfLife {
       .attr("height", `${height}px`)
 
       .on("mousemove touchmove", function () {
+        d3.event.preventDefault();
         const [mouseX, mouseY] = d3.mouse(this);
         const coord = {
           x: Math.ceil(mouseY / CELL_SIZE) - 1,
