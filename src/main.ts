@@ -226,12 +226,22 @@ let generations = 0;
 let wentExtinct = false;
 const game = new GameOfLife();
 game.render("#game");
+
+function setIsRunning(isRunning: boolean) {
+  game.isRunning = isRunning;
+
+  if (isRunning) {
+    button.classList.add("isRunning");
+  } else {
+    button.classList.remove("isRunning");
+  }
+}
+
 game.onNextTick = (allDied: boolean) => {
   document.querySelector("#status")!.innerHTML = `Generation: ${generations++}`;
   if (allDied) {
     wentExtinct = true;
-    game.isRunning = false;
-    button.style.backgroundColor = !game.isRunning ? "#1a1a1a" : "maroon";
+    setIsRunning(false);
   }
 };
 
@@ -241,8 +251,7 @@ button.addEventListener("click", () => {
   if (!game.isRunning && wentExtinct) {
     generations = 0;
   }
-  game.isRunning = !game.isRunning;
-  button.style.backgroundColor = !game.isRunning ? "#1a1a1a" : "maroon";
+  setIsRunning(!game.isRunning);
 });
 
 const slider = document.querySelector("#speed") as any;
