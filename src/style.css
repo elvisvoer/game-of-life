@@ -47,10 +47,6 @@ button {
 button:hover {
   filter: opacity(0.8);
 }
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
-}
 
 button.isRunning {
   background-color: maroon;
