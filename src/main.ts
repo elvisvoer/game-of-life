@@ -47,12 +47,7 @@ class GameOfLife {
   }
 
   set speed(s: number) {
-    // - s=[0...100] so we multiply by 10 to get a timer range of
-    // [10...1000]ms
-    // - we do a square root of the value so the slider is not
-    // a linear function, Math.ceil and the other times 10 is
-    // for rounding up the number and get to the [0..100] range
-    this._delta = (100 - Math.ceil(Math.sqrt(s) * 10)) * 10;
+    this._delta = (100 - s) * 10;
   }
 
   public render(rootElementSelector: string | Element | null) {
