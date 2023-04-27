@@ -59,11 +59,41 @@ class GameOfLife {
     const width = NUM_CELLS_Y * CELL_SIZE + START_OFFSET * 2;
     const height = NUM_CELLS_X * CELL_SIZE + START_OFFSET * 2;
 
+    const toggleCellState = (coord: Point) => {
+      if (this.isRunning || this.isOutOfBounds(coord)) {
+        return;
+      }
+
+      const alive = this._displayData[coord.x][coord.y]?.alive;
+      this.setIsAlive(coord, !alive);
+    };
+
+    let lastCell = { x: -1, y: -1 };
+    const checkHasEnteredCell = (coord: Point) => {
+      if (lastCell.x === coord.x && lastCell.y === coord.y) {
+        return false;
+      }
+
+      lastCell = { ...coord };
+      return true;
+    };
+
     const grid = d3
       .select(rootElementSelector)
       .append("svg")
       .attr("width", `${width}px`)
-      .attr("height", `${height}px`);
+      .attr("height", `${height}px`)
+
+      .on("mousemove touchmove", function () {
+        const [mouseX, mouseY] = d3.mouse(this);
+        const coord = {
+          x: Math.ceil(mouseY / CELL_SIZE) - 1,
+          y: Math.ceil(mouseX / CELL_SIZE) - 1,
+        };
+        if (checkHasEnteredCell(coord)) {
+          toggleCellState(coord);
+        }
+      });
 
     const row = grid
       .selectAll(".row")
@@ -98,15 +128,7 @@ class GameOfLife {
         return d.height;
       })
       .style("fill", "transparent")
-      .style("stroke", "#000")
-      .on("mouseenter", ({ coord }: D3Cell) => {
-        if (this.isRunning) {
-          return;
-        }
-
-        const alive = this._displayData[coord.x][coord.y].alive;
-        this.setIsAlive(coord, !alive);
-      });
+      .style("stroke", "#000");
   }
 
   public tick() {
