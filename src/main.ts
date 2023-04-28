@@ -81,6 +81,10 @@ class GameOfLife {
 
       .on("mousemove touchmove", function () {
         d3.event.preventDefault();
+        // select cells on mouse move + ctrl key or mobile touch
+        if (d3.event.type === "mousemove" && !d3.event.ctrlKey) {
+          return;
+        }
         // @ts-ignore
         const [mouseX, mouseY] = d3.mouse(this);
         const coord = {
