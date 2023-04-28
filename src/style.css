@@ -33,9 +33,9 @@ h1 {
 }
 
 button {
-  border-radius: 8px;
+  border-radius: 50px;
   border: none;
-  padding: 0.6em 1.2em;
+  padding: 1em;
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
@@ -45,6 +45,7 @@ button {
 
   min-width: 55px;
 }
+
 button:hover {
   filter: opacity(0.8);
 }
