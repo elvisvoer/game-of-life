@@ -125,7 +125,8 @@ class GameOfLife {
         return d.height;
       })
       .style("fill", "transparent")
-      .style("stroke", "#000");
+      .style("stroke", "#000")
+      .on("click", (d: D3Cell) => toggleCellState(d.coord));
   }
 
   public tick() {
