@@ -242,7 +242,6 @@ class GameOfLife {
 
 let button: HTMLButtonElement;
 let generations = 0;
-let wentExtinct = false;
 const game = new GameOfLife();
 game.render("#game");
 
@@ -256,23 +255,25 @@ function setIsRunning(isRunning: boolean) {
   }
 }
 
+function setStatus(gen: number) {
+  document.querySelector("#status")!.innerHTML = `Generations: ${gen}`;
+}
+
 game.onNextTick = (allDied: boolean) => {
-  document.querySelector(
-    "#status"
-  )!.innerHTML = `Generations: ${generations++}`;
+  setStatus(++generations);
+
   if (allDied) {
-    wentExtinct = true;
     setIsRunning(false);
   }
 };
 
 button = document.querySelector("#toggle-game") as HTMLButtonElement;
 button.addEventListener("click", () => {
-  // if was paused because it went extinct
-  if (!game.isRunning && wentExtinct) {
+  if (!game.isRunning) {
     generations = 0;
-    wentExtinct = false;
+    setStatus(generations);
   }
+
   setIsRunning(!game.isRunning);
 });
 
