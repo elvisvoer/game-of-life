@@ -251,8 +251,10 @@ function setIsRunning(isRunning: boolean) {
 
   if (isRunning) {
     button.classList.add("isRunning");
+    button.innerHTML = "&#9208;";
   } else {
     button.classList.remove("isRunning");
+    button.innerHTML = "&#9205;";
   }
 }
 

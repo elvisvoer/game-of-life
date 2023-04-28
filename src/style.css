@@ -41,8 +41,9 @@ button {
   font-family: inherit;
   background-color: #1a1a1a;
   cursor: pointer;
-
   line-height: 1em;
+
+  min-width: 55px;
 }
 button:hover {
   filter: opacity(0.8);
