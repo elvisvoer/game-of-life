@@ -257,7 +257,9 @@ function setIsRunning(isRunning: boolean) {
 }
 
 game.onNextTick = (allDied: boolean) => {
-  document.querySelector("#status")!.innerHTML = `Generations: ${generations++}`;
+  document.querySelector(
+    "#status"
+  )!.innerHTML = `Generations: ${generations++}`;
   if (allDied) {
     wentExtinct = true;
     setIsRunning(false);
@@ -269,6 +271,7 @@ button.addEventListener("click", () => {
   // if was paused because it went extinct
   if (!game.isRunning && wentExtinct) {
     generations = 0;
+    wentExtinct = false;
   }
   setIsRunning(!game.isRunning);
 });
