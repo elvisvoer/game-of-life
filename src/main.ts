@@ -133,6 +133,16 @@ class GameOfLife {
       .on("click", (d: D3Cell) => toggleCellState(d.coord));
   }
 
+  public reset() {
+    this.isRunning = false;
+
+    this._displayData.forEach((line) =>
+      line.forEach((cell) => {
+        this.setIsAlive(cell.coord, false);
+      })
+    );
+  }
+
   public tick() {
     if (!this.isRunning) {
       return;
@@ -245,7 +255,7 @@ class GameOfLife {
   }
 }
 
-let button: HTMLButtonElement;
+let startButton: HTMLButtonElement;
 let generations = 0;
 const game = new GameOfLife();
 game.render("#game");
@@ -254,14 +264,20 @@ function setIsRunning(isRunning: boolean) {
   game.isRunning = isRunning;
 
   if (isRunning) {
-    button.classList.add("isRunning");
+    startButton.classList.add("isRunning");
   } else {
-    button.classList.remove("isRunning");
+    startButton.classList.remove("isRunning");
   }
 }
 
 function setStatus(gen: number) {
   document.querySelector("#status")!.innerHTML = `Generations: ${gen}`;
+}
+
+function reset() {
+  generations = 0;
+  setStatus(generations);
+  setIsRunning(false);
 }
 
 game.onNextTick = (allDied: boolean) => {
@@ -272,14 +288,19 @@ game.onNextTick = (allDied: boolean) => {
   }
 };
 
-button = document.querySelector("#start") as HTMLButtonElement;
-button.addEventListener("click", () => {
+startButton = document.querySelector("#start") as HTMLButtonElement;
+startButton.addEventListener("click", () => {
   if (!game.isRunning) {
-    generations = 0;
-    setStatus(generations);
+    reset();
   }
 
   setIsRunning(!game.isRunning);
+});
+
+const resetButton = document.querySelector("#reset") as HTMLButtonElement;
+resetButton.addEventListener("click", () => {
+  game.reset();
+  reset();
 });
 
 const slider = document.querySelector("#speed") as any;
