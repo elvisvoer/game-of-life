@@ -272,7 +272,7 @@ game.onNextTick = (allDied: boolean) => {
   }
 };
 
-button = document.querySelector("#toggle-game") as HTMLButtonElement;
+button = document.querySelector("#start") as HTMLButtonElement;
 button.addEventListener("click", () => {
   if (!game.isRunning) {
     generations = 0;
