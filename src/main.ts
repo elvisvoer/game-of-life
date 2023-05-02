@@ -260,26 +260,6 @@ let generations = 0;
 const game = new GameOfLife();
 game.render("#game");
 
-function setIsRunning(isRunning: boolean) {
-  game.isRunning = isRunning;
-
-  if (isRunning) {
-    startButton.classList.add("isRunning");
-  } else {
-    startButton.classList.remove("isRunning");
-  }
-}
-
-function setStatus(gen: number) {
-  document.querySelector("#status")!.innerHTML = `Generations: ${gen}`;
-}
-
-function reset() {
-  generations = 0;
-  setStatus(generations);
-  setIsRunning(false);
-}
-
 game.onNextTick = (allDied: boolean) => {
   setStatus(++generations);
 
@@ -307,3 +287,23 @@ const slider = document.querySelector("#speed") as any;
 slider?.addEventListener("input", () => {
   game.speed = slider?.value;
 });
+
+function setIsRunning(isRunning: boolean) {
+  game.isRunning = isRunning;
+
+  if (isRunning) {
+    startButton.classList.add("isRunning");
+  } else {
+    startButton.classList.remove("isRunning");
+  }
+}
+
+function setStatus(gen: number) {
+  document.querySelector("#status")!.innerHTML = `Generations: ${gen}`;
+}
+
+function reset() {
+  generations = 0;
+  setStatus(generations);
+  setIsRunning(false);
+}
