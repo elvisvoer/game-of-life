@@ -49,10 +49,6 @@ button:hover {
   filter: opacity(0.8);
 }
 
-button.isRunning {
-  background-color: darkred;
-}
-
 .controls {
   display: flex;
   gap: 1rem;
@@ -66,6 +62,18 @@ button.isRunning {
 #status {
   font-weight: normal;
   color: darkorange;
+}
+
+#stop-icon {
+  display: none;
+}
+
+.active #stop-icon {
+  display: inline-block;
+}
+
+.active #start-icon {
+  display: none;
 }
 
 @media (prefers-color-scheme: light) {

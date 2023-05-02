@@ -292,9 +292,9 @@ function setIsRunning(isRunning: boolean) {
   game.isRunning = isRunning;
 
   if (isRunning) {
-    startButton.classList.add("isRunning");
+    startButton.classList.add("active");
   } else {
-    startButton.classList.remove("isRunning");
+    startButton.classList.remove("active");
   }
 }
 
