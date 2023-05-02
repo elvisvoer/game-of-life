@@ -255,11 +255,14 @@ class GameOfLife {
   }
 }
 
-let startButton: HTMLButtonElement;
-let generations = 0;
+// main
+const startButton: HTMLButtonElement = document.querySelector("#start")!;
+const resetButton: HTMLButtonElement = document.querySelector("#reset")!;
+const slider: HTMLInputElement = document.querySelector("#speed")!;
 const game = new GameOfLife();
-game.render("#game");
+let generations = 0;
 
+game.render("#game");
 game.onNextTick = (allDied: boolean) => {
   setStatus(++generations);
 
@@ -268,7 +271,6 @@ game.onNextTick = (allDied: boolean) => {
   }
 };
 
-startButton = document.querySelector("#start") as HTMLButtonElement;
 startButton.addEventListener("click", () => {
   if (!game.isRunning) {
     reset();
@@ -277,15 +279,13 @@ startButton.addEventListener("click", () => {
   setIsRunning(!game.isRunning);
 });
 
-const resetButton = document.querySelector("#reset") as HTMLButtonElement;
 resetButton.addEventListener("click", () => {
   game.reset();
   reset();
 });
 
-const slider = document.querySelector("#speed") as any;
-slider?.addEventListener("input", () => {
-  game.speed = slider?.value;
+slider.addEventListener("input", () => {
+  game.speed = Number(slider.value);
 });
 
 function setIsRunning(isRunning: boolean) {
