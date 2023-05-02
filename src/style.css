@@ -55,7 +55,7 @@ button.isRunning {
 
 .controls {
   display: flex;
-  gap: 2.5rem;
+  gap: 1rem;
 }
 
 .controls input {
