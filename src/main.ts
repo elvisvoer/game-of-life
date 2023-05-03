@@ -27,6 +27,7 @@ class GameOfLife {
   private _delta: number = 500;
 
   public isRunning: boolean = false;
+  public fuzziness: number = 0;
   public onNextTick?: Function;
 
   constructor() {
@@ -173,7 +174,10 @@ class GameOfLife {
     this._displayData[coord.x][coord.y].alive = isAlive;
 
     const cell = d3.select(`#c-${coord.x}-${coord.y}`);
-    cell.style("fill", isAlive ? "gold" : "transparent");
+    cell
+      .transition()
+      .duration(this.fuzziness)
+      .style("fill", isAlive ? "gold" : "transparent");
   }
 
   private getAllNeighborsCount(data: D3Cell[][]): number[][] {
@@ -258,7 +262,8 @@ class GameOfLife {
 // main
 const startButton: HTMLButtonElement = document.querySelector("#start")!;
 const resetButton: HTMLButtonElement = document.querySelector("#reset")!;
-const slider: HTMLInputElement = document.querySelector("#speed")!;
+const speedSlider: HTMLInputElement = document.querySelector("#speed")!;
+const fuzzinessSlider: HTMLInputElement = document.querySelector("#fuzziness")!;
 const game = new GameOfLife();
 let generations = 0;
 
@@ -284,8 +289,12 @@ resetButton.addEventListener("click", () => {
   reset();
 });
 
-slider.addEventListener("input", () => {
-  game.speed = Number(slider.value);
+speedSlider.addEventListener("input", () => {
+  game.speed = Number(speedSlider.value);
+});
+
+fuzzinessSlider.addEventListener("input", () => {
+  game.fuzziness = Number(fuzzinessSlider.value) * 10;
 });
 
 function setIsRunning(isRunning: boolean) {

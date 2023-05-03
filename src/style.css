@@ -51,12 +51,16 @@ button:hover {
 
 .controls {
   display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
   gap: 1rem;
 }
 
-.controls input {
+input {
   width: 100%;
+  max-width: 720px;
   accent-color: darkred;
+  margin: 0 1rem;
 }
 
 #status {
