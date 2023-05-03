@@ -278,7 +278,7 @@ game.onNextTick = (allDied: boolean) => {
 
 startButton.addEventListener("click", () => {
   if (!game.isRunning) {
-    reset();
+    init();
   }
 
   setIsRunning(!game.isRunning);
@@ -286,7 +286,7 @@ startButton.addEventListener("click", () => {
 
 resetButton.addEventListener("click", () => {
   game.reset();
-  reset();
+  init();
 });
 
 speedSlider.addEventListener("input", () => {
@@ -311,8 +311,12 @@ function setStatus(gen: number) {
   document.querySelector("#status")!.innerHTML = `Generations: ${gen}`;
 }
 
-function reset() {
-  generations = 0;
-  setStatus(generations);
+function init() {
   setIsRunning(false);
+  generations = 0;
+  game.speed = 50;
+  game.fuzziness = 0;
+  setStatus(generations);
+  speedSlider.value = "50"
+  fuzzinessSlider.value = "0";
 }
