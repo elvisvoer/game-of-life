@@ -151,10 +151,14 @@ class GameOfLife {
 
     let allDied = true;
 
-    const count = this.getAllNeighborsCount(this._displayData);
-    count.forEach((line, row) =>
-      line.forEach((neighborsCount, col) => {
+    for (let row = 0; row < this._displayData.length; row++) {
+      for (let col = 0; col < this._displayData[row].length; col++) {
         const cell = this._displayData[row][col];
+        const neighborsCount = this.countNeighbors(
+          this._displayData,
+          cell.coord
+        );
+
         if (
           (cell.alive && [2, 3].includes(neighborsCount)) ||
           (!cell.alive && [3].includes(neighborsCount))
@@ -164,8 +168,8 @@ class GameOfLife {
         } else {
           this.setIsAlive(cell.coord, false);
         }
-      })
-    );
+      }
+    }
 
     this.onNextTick?.(allDied);
   }
@@ -178,19 +182,6 @@ class GameOfLife {
       .transition()
       .duration(this.fuzziness)
       .style("fill", isAlive ? "gold" : "transparent");
-  }
-
-  private getAllNeighborsCount(data: D3Cell[][]): number[][] {
-    const result: number[][] = [];
-    for (let row = 0; row < data.length; row++) {
-      result.push([]);
-      for (let col = 0; col < data[row].length; col++) {
-        const count = this.countNeighbors(data, data[row][col].coord);
-        result[row].push(count);
-      }
-    }
-
-    return result;
   }
 
   private countNeighbors(data: D3Cell[][], { x, y }: Point): number {
@@ -317,6 +308,6 @@ function init() {
   game.speed = 50;
   game.fuzziness = 0;
   setStatus(generations);
-  speedSlider.value = "50"
+  speedSlider.value = "50";
   fuzzinessSlider.value = "0";
 }
