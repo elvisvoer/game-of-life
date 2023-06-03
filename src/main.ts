@@ -14,11 +14,11 @@ type D3Cell = {
   coord: Point;
 };
 
-const CELL_SIZE = 32;
+const CELL_SIZE = 24;
 const START_OFFSET = 1;
 
-const NUM_CELLS_X = Math.floor(window.innerHeight / CELL_SIZE) - 8;
-const NUM_CELLS_Y = Math.floor(window.innerWidth / CELL_SIZE) - 2;
+const NUM_CELLS_X = Math.floor(window.innerHeight / CELL_SIZE) - 10;
+const NUM_CELLS_Y = Math.floor(window.innerWidth / CELL_SIZE);
 
 declare const d3: any;
 
